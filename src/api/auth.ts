@@ -3,6 +3,7 @@ import type {
   LoginRequest,
   LoginResponse,
   SignupRequest,
+  SignupResponse,
   User,
 } from "@/types/api";
 
@@ -11,8 +12,8 @@ export async function login(payload: LoginRequest): Promise<LoginResponse> {
   return res.data;
 }
 
-export async function signup(payload: SignupRequest): Promise<LoginResponse> {
-  const res = await apiClient.post<LoginResponse>("/api/auth/signup", payload);
+export async function signup(payload: SignupRequest): Promise<SignupResponse> {
+  const res = await apiClient.post<SignupResponse>("/api/auth/signup", payload);
   return res.data;
 }
 

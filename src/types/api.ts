@@ -12,17 +12,19 @@ export interface ApiResponse<T> {
   timestamp: string;
 }
 
-export interface AuthTokens {
-  accessToken: string;
-  refreshToken: string;
-  tokenType?: string;
-  expiresIn?: number;
+export type UserRole = "USER" | "ADMIN";
+
+export interface UserInfo {
+  id: number;
+  email: string;
+  role: UserRole;
 }
 
-export interface User {
-  id: number | string;
-  email: string;
-  name?: string;
+export interface User extends UserInfo {
+  checkInIntervalDays?: number;
+  lastCheckInAt?: string | null;
+  nextCheckInDueAt?: string | null;
+  createdAt?: string;
 }
 
 export interface LoginRequest {
@@ -30,12 +32,28 @@ export interface LoginRequest {
   password: string;
 }
 
+export interface LoginResponse {
+  accessToken: string;
+  refreshToken: string;
+  expiresIn: number;
+  user: UserInfo;
+}
+
 export interface SignupRequest {
   email: string;
   password: string;
-  name: string;
+  checkInIntervalDays: number;
 }
 
-export interface LoginResponse extends AuthTokens {
-  user?: User;
+export interface SignupResponse {
+  userId: number;
+  email: string;
+  role: UserRole;
+  checkInIntervalDays: number;
+  nextCheckInDueAt: string;
+  nextStep: string;
+}
+
+export interface TokenRefreshRequest {
+  refreshToken: string;
 }
