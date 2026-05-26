@@ -141,3 +141,13 @@ export interface RecipientListQuery {
   size?: number;
   sort?: string;
 }
+
+// ===== CheckIn =====
+
+export interface CheckInStatusResponse {
+  lastCheckInAt: string | null;
+  nextCheckInDueAt: string;
+  checkInIntervalDays: number;
+  overdue: boolean;
+  daysUntilDue: number;
+}

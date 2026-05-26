@@ -1,4 +1,34 @@
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { CheckInWidget } from "@/components/dashboard/CheckInWidget";
+import { listAssets } from "@/api/assets";
+import { listRecipients } from "@/api/recipients";
+
 export function DashboardPage() {
+  const [assetCount, setAssetCount] = useState<number | null>(null);
+  const [recipientCount, setRecipientCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    listAssets({ size: 1 })
+      .then((p) => {
+        if (!cancelled) setAssetCount(p.totalElements);
+      })
+      .catch(() => {
+        if (!cancelled) setAssetCount(0);
+      });
+    listRecipients({ size: 1 })
+      .then((p) => {
+        if (!cancelled) setRecipientCount(p.totalElements);
+      })
+      .catch(() => {
+        if (!cancelled) setRecipientCount(0);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <div className="flex flex-col gap-8">
       <header>
@@ -8,10 +38,28 @@ export function DashboardPage() {
         </p>
       </header>
 
+      <CheckInWidget />
+
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <StatCard label="등록된 자산" value="-" />
-        <StatCard label="활성 규칙" value="-" />
-        <StatCard label="최근 체크인" value="-" />
+        <StatCard
+          label="등록된 자산"
+          value={assetCount === null ? "-" : `${assetCount}`}
+          unit="개"
+          to="/assets"
+        />
+        <StatCard
+          label="수신자"
+          value={recipientCount === null ? "-" : `${recipientCount}`}
+          unit="명"
+          to="/recipients"
+        />
+        <StatCard
+          label="활성 인계 규칙"
+          value="-"
+          unit=""
+          to="/rules"
+          hint="준비 중"
+        />
       </div>
 
       <section>
@@ -21,33 +69,57 @@ export function DashboardPage() {
             title="자산 등록하기"
             description="계정, 파일, 메시지 추가"
             accent="violet"
+            to="/assets"
           />
           <QuickAction
             title="수신자 지정하기"
             description="신뢰할 수 있는 사람 설정"
-            accent="blue"
+            accent="green"
+            to="/recipients"
           />
           <QuickAction
             title="전달 조건 설정"
-            description="자동 전달 조건 구성"
-            accent="green"
+            description="자동 전달 조건 구성 (준비 중)"
+            accent="blue"
+            to="/rules"
           />
         </div>
       </section>
-
-      <p className="text-xs text-slate-500">
-        와이어프레임 반영 전 placeholder 화면입니다.
-      </p>
     </div>
   );
 }
 
-function StatCard({ label, value }: { label: string; value: string }) {
+function StatCard({
+  label,
+  value,
+  unit,
+  to,
+  hint,
+}: {
+  label: string;
+  value: string;
+  unit: string;
+  to: string;
+  hint?: string;
+}) {
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5">
-      <p className="text-xs text-slate-400">{label}</p>
-      <p className="mt-2 text-3xl font-semibold text-slate-50">{value}</p>
-    </div>
+    <Link
+      to={to}
+      className="group rounded-xl border border-slate-800 bg-slate-900/60 p-5 transition-colors hover:border-slate-700"
+    >
+      <div className="flex items-center justify-between">
+        <p className="text-xs text-slate-400">{label}</p>
+        {hint && (
+          <span className="rounded-full border border-slate-700 px-2 py-0.5 text-[10px] text-slate-500">
+            {hint}
+          </span>
+        )}
+      </div>
+      <p className="mt-2 flex items-baseline gap-1">
+        <span className="text-3xl font-semibold text-slate-50">{value}</span>
+        {unit && <span className="text-sm text-slate-400">{unit}</span>}
+      </p>
+    </Link>
   );
 }
 
@@ -61,18 +133,20 @@ function QuickAction({
   title,
   description,
   accent,
+  to,
 }: {
   title: string;
   description: string;
   accent: keyof typeof accentMap;
+  to: string;
 }) {
   return (
-    <button
-      type="button"
-      className={`flex flex-col items-start gap-1 rounded-xl border bg-slate-900/40 p-4 text-left transition-colors ${accentMap[accent]}`}
+    <Link
+      to={to}
+      className={`flex flex-col items-start gap-1 rounded-xl border bg-slate-900/40 p-4 transition-colors ${accentMap[accent]}`}
     >
       <span className="text-sm font-semibold text-slate-100">{title}</span>
       <span className="text-xs text-slate-400">{description}</span>
-    </button>
+    </Link>
   );
 }
