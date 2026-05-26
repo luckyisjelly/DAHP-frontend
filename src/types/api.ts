@@ -12,6 +12,16 @@ export interface ApiResponse<T> {
   timestamp: string;
 }
 
+export interface PageResponse<T> {
+  content: T[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+  first: boolean;
+  last: boolean;
+}
+
 export type UserRole = "USER" | "ADMIN";
 
 export interface UserInfo {
@@ -56,4 +66,48 @@ export interface SignupResponse {
 
 export interface TokenRefreshRequest {
   refreshToken: string;
+}
+
+// ===== Asset =====
+
+export type AssetType =
+  | "ACCOUNT"
+  | "FILE"
+  | "NOTE"
+  | "LINK"
+  | "MESSAGE"
+  | "DOCUMENT"
+  | "ETC";
+
+export type SensitivityLevel = "LOW" | "MEDIUM" | "HIGH";
+
+export interface AssetResponse {
+  id: number;
+  title: string;
+  type: AssetType;
+  description?: string | null;
+  content?: string | null;
+  externalRef?: string | null;
+  sensitivityLevel: SensitivityLevel;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AssetCreateRequest {
+  title: string;
+  type: AssetType;
+  description?: string;
+  content?: string;
+  externalRef?: string;
+  sensitivityLevel?: SensitivityLevel;
+}
+
+export type AssetUpdateRequest = Partial<AssetCreateRequest>;
+
+export interface AssetListQuery {
+  type?: AssetType;
+  q?: string;
+  page?: number;
+  size?: number;
+  sort?: string;
 }
