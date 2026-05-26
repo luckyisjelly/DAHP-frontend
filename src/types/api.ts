@@ -111,3 +111,33 @@ export interface AssetListQuery {
   size?: number;
   sort?: string;
 }
+
+// ===== Recipient =====
+
+export interface RecipientResponse {
+  id: number;
+  name: string;
+  email: string;
+  phone?: string | null;
+  relationship?: string | null;
+  memo?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface RecipientCreateRequest {
+  name: string;
+  email: string;
+  phone?: string;
+  relationship?: string;
+  memo?: string;
+}
+
+export type RecipientUpdateRequest = Partial<RecipientCreateRequest>;
+
+export interface RecipientListQuery {
+  q?: string;
+  page?: number;
+  size?: number;
+  sort?: string;
+}
