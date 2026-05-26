@@ -7,9 +7,13 @@ import { DashboardPage } from "@/pages/DashboardPage";
 import { AssetsPage } from "@/pages/AssetsPage";
 import { RecipientsPage } from "@/pages/RecipientsPage";
 import { RulesPage } from "@/pages/RulesPage";
+import { HandoverAccessPage } from "@/pages/HandoverAccessPage";
 import { NotFoundPage } from "@/pages/NotFoundPage";
 
 export const router = createBrowserRouter([
+  // 공개 라우트 (인증 X, 레이아웃 X) — 수령인 접근 페이지
+  { path: "/handover-access/:token", element: <HandoverAccessPage /> },
+
   {
     element: <AuthLayout />,
     children: [

@@ -243,3 +243,32 @@ export interface HandoverTriggerResponse {
   eventCount: number;
   events: HandoverEventResponse[];
 }
+
+// ===== HandoverAccess (수령인 공개) =====
+
+export interface HandoverAccessAsset {
+  title: string;
+  type: AssetType;
+  description?: string | null;
+  content?: string | null;
+  externalRef?: string | null;
+  sensitivityLevel: SensitivityLevel;
+}
+
+export interface HandoverAccessRule {
+  title: string;
+  description?: string | null;
+}
+
+export interface HandoverAccessOwner {
+  email: string;
+}
+
+export interface HandoverAccessResponse {
+  asset: HandoverAccessAsset;
+  rule: HandoverAccessRule;
+  owner: HandoverAccessOwner;
+  accessedAt: string;
+  expiresAt: string;
+  notice: string;
+}
