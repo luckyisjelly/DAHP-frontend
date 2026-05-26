@@ -151,3 +151,95 @@ export interface CheckInStatusResponse {
   overdue: boolean;
   daysUntilDue: number;
 }
+
+// ===== HandoverRule =====
+
+export type HandoverConditionType =
+  | "MANUAL_APPROVAL"
+  | "SPECIFIC_DATE"
+  | "INACTIVITY_PERIOD";
+
+export type HandoverRuleStatus =
+  | "DRAFT"
+  | "ACTIVE"
+  | "PAUSED"
+  | "TRIGGERED"
+  | "COMPLETED"
+  | "CANCELLED";
+
+export interface AssetSummary {
+  id: number;
+  title: string;
+  type: AssetType;
+}
+
+export interface RecipientSummary {
+  id: number;
+  name: string;
+  email: string;
+}
+
+export interface HandoverRuleResponse {
+  id: number;
+  title: string;
+  description?: string | null;
+  conditionType: HandoverConditionType;
+  conditionValue?: string | null;
+  status: HandoverRuleStatus;
+  assets: AssetSummary[];
+  recipients: RecipientSummary[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface HandoverRuleCreateRequest {
+  title: string;
+  description?: string;
+  conditionType: HandoverConditionType;
+  conditionValue?: string;
+  assetIds: number[];
+  recipientIds: number[];
+}
+
+export interface HandoverRuleUpdateRequest {
+  title?: string;
+  description?: string;
+  conditionType?: HandoverConditionType;
+  conditionValue?: string;
+  assetIds?: number[];
+  recipientIds?: number[];
+}
+
+export interface HandoverRuleListQuery {
+  status?: HandoverRuleStatus;
+  page?: number;
+  size?: number;
+  sort?: string;
+}
+
+// ===== HandoverEvent =====
+
+export type HandoverEventStatus =
+  | "PENDING"
+  | "NOTIFIED"
+  | "ACCESSED"
+  | "EXPIRED"
+  | "CANCELLED";
+
+export interface HandoverEventResponse {
+  id: number;
+  ruleId: number;
+  assetId: number;
+  recipientId: number;
+  status: HandoverEventStatus;
+  triggeredAt: string;
+  expiresAt: string;
+  accessedAt?: string | null;
+}
+
+export interface HandoverTriggerResponse {
+  ruleId: number;
+  ruleStatus: HandoverRuleStatus;
+  eventCount: number;
+  events: HandoverEventResponse[];
+}

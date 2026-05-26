@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import { CheckInWidget } from "@/components/dashboard/CheckInWidget";
 import { listAssets } from "@/api/assets";
 import { listRecipients } from "@/api/recipients";
+import { listRules } from "@/api/rules";
 
 export function DashboardPage() {
   const [assetCount, setAssetCount] = useState<number | null>(null);
   const [recipientCount, setRecipientCount] = useState<number | null>(null);
+  const [activeRuleCount, setActiveRuleCount] = useState<number | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -23,6 +25,13 @@ export function DashboardPage() {
       })
       .catch(() => {
         if (!cancelled) setRecipientCount(0);
+      });
+    listRules({ size: 1, status: "ACTIVE" })
+      .then((p) => {
+        if (!cancelled) setActiveRuleCount(p.totalElements);
+      })
+      .catch(() => {
+        if (!cancelled) setActiveRuleCount(0);
       });
     return () => {
       cancelled = true;
@@ -55,10 +64,9 @@ export function DashboardPage() {
         />
         <StatCard
           label="활성 인계 규칙"
-          value="-"
-          unit=""
+          value={activeRuleCount === null ? "-" : `${activeRuleCount}`}
+          unit="개"
           to="/rules"
-          hint="준비 중"
         />
       </div>
 
@@ -79,7 +87,7 @@ export function DashboardPage() {
           />
           <QuickAction
             title="전달 조건 설정"
-            description="자동 전달 조건 구성 (준비 중)"
+            description="자동 전달 조건 구성"
             accent="blue"
             to="/rules"
           />
