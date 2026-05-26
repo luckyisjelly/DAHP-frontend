@@ -7,7 +7,7 @@ export function SignupPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [checkInIntervalDays, setCheckInIntervalDays] = useState(7);
+  const [checkInIntervalDays, setCheckInIntervalDays] = useState(90);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -31,18 +31,19 @@ export function SignupPage() {
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-4">
-      <label className="flex flex-col gap-1 text-sm">
-        <span className="text-slate-700">이메일</span>
+      <label className="flex flex-col gap-1.5 text-sm">
+        <span className="text-slate-300">이메일</span>
         <input
           type="email"
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="rounded-md border border-slate-300 px-3 py-2 outline-none focus:border-slate-500"
+          placeholder="your@email.com"
+          className="rounded-md border border-slate-700 bg-slate-800/60 px-3 py-2 text-slate-100 placeholder:text-slate-500 outline-none transition-colors focus:border-violet-500 focus:bg-slate-800"
         />
       </label>
-      <label className="flex flex-col gap-1 text-sm">
-        <span className="text-slate-700">비밀번호</span>
+      <label className="flex flex-col gap-1.5 text-sm">
+        <span className="text-slate-300">비밀번호</span>
         <input
           type="password"
           required
@@ -50,34 +51,64 @@ export function SignupPage() {
           maxLength={100}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="rounded-md border border-slate-300 px-3 py-2 outline-none focus:border-slate-500"
+          placeholder="8자 이상"
+          className="rounded-md border border-slate-700 bg-slate-800/60 px-3 py-2 text-slate-100 placeholder:text-slate-500 outline-none transition-colors focus:border-violet-500 focus:bg-slate-800"
         />
         <span className="text-xs text-slate-500">8~100자</span>
       </label>
-      <label className="flex flex-col gap-1 text-sm">
-        <span className="text-slate-700">체크인 주기 (일)</span>
-        <input
-          type="number"
-          required
-          min={1}
-          max={365}
-          value={checkInIntervalDays}
-          onChange={(e) => setCheckInIntervalDays(Number(e.target.value))}
-          className="rounded-md border border-slate-300 px-3 py-2 outline-none focus:border-slate-500"
-        />
-        <span className="text-xs text-slate-500">1~365일. 이 주기마다 생존 확인이 필요합니다.</span>
-      </label>
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      <div className="flex flex-col gap-2 text-sm">
+        <span className="text-slate-300">체크인 주기</span>
+        <div className="flex items-center gap-3">
+          <input
+            type="range"
+            min={1}
+            max={365}
+            value={checkInIntervalDays}
+            onChange={(e) => setCheckInIntervalDays(Number(e.target.value))}
+            className="flex-1 accent-violet-500"
+          />
+          <span className="w-16 rounded-md border border-slate-700 bg-slate-800/60 px-2 py-1 text-center text-sm text-slate-100">
+            {checkInIntervalDays}일
+          </span>
+        </div>
+        <div className="flex gap-2">
+          {[30, 90, 180].map((d) => (
+            <button
+              key={d}
+              type="button"
+              onClick={() => setCheckInIntervalDays(d)}
+              className={`rounded-md border px-2 py-1 text-xs transition-colors ${
+                checkInIntervalDays === d
+                  ? "border-violet-500 bg-violet-500/10 text-violet-300"
+                  : "border-slate-700 bg-slate-800/40 text-slate-400 hover:border-slate-600 hover:text-slate-200"
+              }`}
+            >
+              {d === 90 ? "90일 (권장)" : `${d}일`}
+            </button>
+          ))}
+        </div>
+        <span className="text-xs text-slate-500">
+          이 주기마다 생존 확인이 필요합니다. 권장: 30~90일.
+        </span>
+      </div>
+      {error && (
+        <p className="rounded-md border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">
+          {error}
+        </p>
+      )}
       <button
         type="submit"
         disabled={loading}
-        className="mt-2 rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 disabled:opacity-50"
+        className="mt-2 rounded-md bg-violet-500 px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-violet-500/20 transition-colors hover:bg-violet-400 disabled:opacity-50"
       >
         {loading ? "가입 중..." : "회원가입"}
       </button>
-      <p className="text-center text-sm text-slate-600">
+      <p className="text-center text-sm text-slate-400">
         이미 계정이 있으신가요?{" "}
-        <Link to="/login" className="font-medium text-slate-900 underline">
+        <Link
+          to="/login"
+          className="font-medium text-violet-400 hover:text-violet-300"
+        >
           로그인
         </Link>
       </p>

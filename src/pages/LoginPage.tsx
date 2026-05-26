@@ -38,41 +38,50 @@ export function LoginPage() {
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-4">
       {fromSignup?.signupEmail && (
-        <p className="rounded-md bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
+        <p className="rounded-md border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-300">
           회원가입이 완료되었습니다. 로그인해주세요.
         </p>
       )}
-      <label className="flex flex-col gap-1 text-sm">
-        <span className="text-slate-700">이메일</span>
+      <label className="flex flex-col gap-1.5 text-sm">
+        <span className="text-slate-300">이메일</span>
         <input
           type="email"
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="rounded-md border border-slate-300 px-3 py-2 outline-none focus:border-slate-500"
+          placeholder="your@email.com"
+          className="rounded-md border border-slate-700 bg-slate-800/60 px-3 py-2 text-slate-100 placeholder:text-slate-500 outline-none transition-colors focus:border-violet-500 focus:bg-slate-800"
         />
       </label>
-      <label className="flex flex-col gap-1 text-sm">
-        <span className="text-slate-700">비밀번호</span>
+      <label className="flex flex-col gap-1.5 text-sm">
+        <span className="text-slate-300">비밀번호</span>
         <input
           type="password"
           required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="rounded-md border border-slate-300 px-3 py-2 outline-none focus:border-slate-500"
+          placeholder="••••••••"
+          className="rounded-md border border-slate-700 bg-slate-800/60 px-3 py-2 text-slate-100 placeholder:text-slate-500 outline-none transition-colors focus:border-violet-500 focus:bg-slate-800"
         />
       </label>
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && (
+        <p className="rounded-md border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">
+          {error}
+        </p>
+      )}
       <button
         type="submit"
         disabled={loading}
-        className="mt-2 rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 disabled:opacity-50"
+        className="mt-2 rounded-md bg-violet-500 px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-violet-500/20 transition-colors hover:bg-violet-400 disabled:opacity-50"
       >
         {loading ? "로그인 중..." : "로그인"}
       </button>
-      <p className="text-center text-sm text-slate-600">
+      <p className="text-center text-sm text-slate-400">
         계정이 없으신가요?{" "}
-        <Link to="/signup" className="font-medium text-slate-900 underline">
+        <Link
+          to="/signup"
+          className="font-medium text-violet-400 hover:text-violet-300"
+        >
           회원가입
         </Link>
       </p>

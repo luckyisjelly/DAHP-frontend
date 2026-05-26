@@ -1,12 +1,72 @@
 @import "tailwindcss";
 
+/*
+ * DAHP 디자인 토큰 (Tailwind v4 @theme)
+ *
+ * 의미 매핑:
+ *   primary  = violet-500 (#8b5cf6) — 주요 액션, 미접속 트리거, 활성 상태
+ *   info     = blue-500   (#3b82f6) — 정보, 단계 인디케이터
+ *   success  = green-500  (#22c55e) — 확인/추가, 수동 트리거, 안전
+ *   warn     = yellow-500 (#eab308) — 주의, 보통 중요도
+ *   danger   = red-500    (#ef4444) — 삭제, 위험, 높음 중요도, 임박
+ *
+ * 표면(surface) 계층:
+ *   surface-0 = slate-950 — 페이지 배경 (가장 어두움)
+ *   surface-1 = slate-900 — 카드/패널
+ *   surface-2 = slate-800 — 중첩 카드, 입력칸
+ */
+
+@theme {
+  --color-brand-primary: #8b5cf6;
+  --color-brand-info: #3b82f6;
+  --color-brand-success: #22c55e;
+  --color-brand-warn: #eab308;
+  --color-brand-danger: #ef4444;
+
+  --color-surface-0: #020617;
+  --color-surface-1: #0f172a;
+  --color-surface-2: #1e293b;
+  --color-border-default: #334155;
+
+  --font-sans:
+    "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", "Noto Sans KR", Roboto, sans-serif;
+}
+
 html,
 body,
 #root {
   height: 100%;
 }
 
+html {
+  color-scheme: dark;
+}
+
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR",
-    Roboto, sans-serif;
+  background-color: var(--color-surface-0);
+  color: #f8fafc;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: rgba(139, 92, 246, 0.35);
+  color: #f8fafc;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
 }
